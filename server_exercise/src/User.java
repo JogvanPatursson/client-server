@@ -1,10 +1,12 @@
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String name;
     private String address;
     private int portNumber;
 
     // Constructor
-    User (String name, String address, int portNumber) {
+    User(String name, String address, int portNumber) {
         this.name = name;
         this.address = address;
         this.portNumber = portNumber;
