@@ -3,6 +3,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class BlockingQueueArray implements BlockingQueue{
 
     ArrayBlockingQueue<Message> messageQueue;
+    ArrayBlockingQueue<Users> userQueue;
 
     public BlockingQueueArray(int capacity) {
         this.messageQueue = new ArrayBlockingQueue<>(capacity);

@@ -13,9 +13,7 @@ public class App {
         Message message = new Message("Jogvan", "Hello");
         
         try {
-            while (true) {
-                System.out.println("Hello world");
-                
+            while (true) {                
                 ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                 //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                 Thread.sleep(1000);

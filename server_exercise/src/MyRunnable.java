@@ -16,24 +16,34 @@ public class MyRunnable implements Runnable {
     @Override
     public void run() {
         // Check for input from client
-        while (true) {
+        while (socket.isConnected()) {
             
         
                 try {
                     // Read from client
 
                     ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-       
-                    Message message = (Message) input.readObject();
+                    Object object = input.readObject();
+
+                    if (object instanceof Message) {
+                        Message message = (Message) object;
+                        System.out.println(message.getMessageText());
+                    }
+
+                    if (object instanceof User) {
+                        User user = (User) object;
+                        System.out.println(user.getName());
+                    }
+                    //Message message = (Message) input.readObject();
                     //Object object = input.readObject();
-                    System.out.println("Client: " + message.getMessageText());
+                    //System.out.println("Client: " + message.getMessageText());
                     
-                    queue.putMessage(message);
+                    //queue.putMessage(message);
                     // Add to BlockingQueue
                     
-                    Message newMessage = queue.takeMessage();
-                    String newMessageString = newMessage.getMessageText() + " from queue";
-                    System.out.println(newMessageString);
+                    //Message newMessage = queue.takeMessage();
+                    //String newMessageString = newMessage.getMessageText() + " from queue";
+                    //System.out.println(newMessageString);
                     //ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                 
                     //output.writeObject(newMessage);
