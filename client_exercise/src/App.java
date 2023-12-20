@@ -38,7 +38,6 @@ public class App {
                     output.flush();
                     message = null;
                 }
-
                 
                 /*
                  * Listening to input

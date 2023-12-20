@@ -12,20 +12,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server {
     //BlockingQueue queue = new BlockingQueueArray(100, 10);
-    static CopyOnWriteArrayList<Socket> socketList = new CopyOnWriteArrayList<Socket>();
-    static CopyOnWriteArrayList<User> userList = new CopyOnWriteArrayList<User>();
-    CopyOnWriteArrayList<Message> messageList = new CopyOnWriteArrayList<Message>();
+    // static CopyOnWriteArrayList<Socket> socketList = new CopyOnWriteArrayList<Socket>();
+    // static CopyOnWriteArrayList<User> userList = new CopyOnWriteArrayList<User>();
+    // CopyOnWriteArrayList<Message> messageList = new CopyOnWriteArrayList<Message>();
 
+    static CopyOnWriteArrayList<Socket> socketList;
+    static CopyOnWriteArrayList<User> userList;
+    CopyOnWriteArrayList<Message> messageList;
     
-
     public Server() {
-
-    }
-
-    public Server(CopyOnWriteArrayList socketList, CopyOnWriteArrayList userList, CopyOnWriteArrayList messageList) {
-        this.socketList = socketList;
-        this.userList = userList;
-        this.messageList = messageList;
+        this.socketList = new CopyOnWriteArrayList<Socket>();
+        this.userList = new CopyOnWriteArrayList<User>();
+        this.messageList = new CopyOnWriteArrayList<Message>();
     }
 
     public void start(int portNumber) {
@@ -43,6 +41,8 @@ public class Server {
                 Runnable runnable = new ClientHandler(socket, userList, messageList);
                 Thread thread = new Thread(runnable);
                 thread.start();
+
+                // 
             } while (serverSocket.isBound());
 
             // Closes ServerSocket
@@ -64,6 +64,16 @@ public class Server {
     }
 
     /*
+     * Remove User from userList
+     */
+    public static void removeUserFromUserList(User user) {
+        if (userList.contains(user)) {
+            System.out.println("Removed user from userList");
+            userList.remove(user);
+        }
+    }
+
+    /*
      * Add Socket connection to socketList
      */
     public static void addSocketToSocketList(Socket socket) {
@@ -72,6 +82,10 @@ public class Server {
             socketList.add(socket);
         }
     }
+
+    /*
+     * 
+     */
 
     /*
      * Check which Users are online

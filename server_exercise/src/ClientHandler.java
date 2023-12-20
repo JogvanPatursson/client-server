@@ -2,8 +2,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import java.util.Iterator;
 
 public class ClientHandler implements Runnable {
@@ -25,25 +25,15 @@ public class ClientHandler implements Runnable {
         Message message = new Message(null, null);
         User user = new User(null, null, 0);
         
+        try {
+            socket.setSoTimeout(5000);
+        } catch (SocketException e) {
+            // Remove User from userList
+            Server.removeUserFromUserList(user);
+        }
         // Check for input from client
         do {
             try {
-
-                /*
-                if (!messageList.isEmpty()) {
-                    // Check size of messageCopyOnArrayList
-                    Iterator iterator = messageList.iterator();
-                    messageList.clear();
-                    while (iterator.hasNext()) {
-                        message = (Message) iterator.next();
-                        System.out.println(message.getMessageText());
-                        ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-                        output.writeObject(message);
-                        output.flush();
-                    }
-                }
-                */
-
                 // Read from client
                 ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                 Object object = input.readObject();
@@ -66,11 +56,18 @@ public class ClientHandler implements Runnable {
                 }
 
             } catch (IOException | ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                //e.printStackTrace();
+   
             }
-        } while (socket.isConnected());
-        
+            
+        } while (socket.isBound());
+        System.out.println("Disconnected");
+        // When socket is not bound, close socket
+        try {
+            socket.close();
+        } catch (IOException e) {
+            
+        }
+
     }
 
     /*
