@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -104,16 +105,19 @@ public class Server {
      * Send list of users to all users
      */
     public static void sendUserList() {
+        // Convert userList from CopyOnWriteArrayList to ArrayList
+        ArrayList userArrayList = new ArrayList<User>();
+        userArrayList.addAll(userList);
+
         // Iterate list of sockets
         // Send list of users to each socket
-
         Iterator iterator = socketList.iterator();
 
         while (iterator.hasNext()) {
             Socket socket = (Socket)iterator.next();
             try {
                 ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-                output.writeObject(userList);
+                output.writeObject(userArrayList);
             } catch (IOException e) {
                 // TODO: handle exception
             }

@@ -48,13 +48,16 @@ public class App {
                 Object object = input.readObject();
                 
                 if (isMessage(object)) {
+                    // Cast object to Message, and assign message with value
                     message = (Message) object;
                     // Display message to Java FX
+
                 }
 
                 else if (isUserList(object)) {
-                    user = (User) object;
-                    // Add user to list of users
+                    // Cast object to ArrayList, and assign userList with value
+                    userList = (ArrayList) object;
+                    
                 }
             }
         } catch (Exception e) {
@@ -96,7 +99,7 @@ public class App {
     * Check if object is of class User
     */
     public static boolean isUserList(Object object) {
-        if (object instanceof CopyOnWriteArrayList) {
+        if (object instanceof ArrayList) {
             return true;
         }
         else
