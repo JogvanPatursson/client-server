@@ -13,8 +13,8 @@ public class App {
     public static void main(String[] args) throws IOException {
         // Fields
         Socket socket = new Socket("localhost", 8888);
-        User user = createUser("Helgi", "localhost", 8888);
-        Message message = createMessage(null, null);
+        User user = createUser("Jogvan", "localhost", 8888);
+        Message message = createMessage(user.getName(), null);
         ArrayList<User> userList = new ArrayList<User>();
         ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 
@@ -30,11 +30,10 @@ public class App {
             output.flush();
 
             while (true) {
-                
+                Thread.sleep(1000);
                 // If new message is created
                 if (message != null) {
                     output = new ObjectOutputStream(socket.getOutputStream());
-                    System.out.println("message != null");
                     output.writeObject(message);
                     output.flush();
                     message = null;
@@ -51,12 +50,14 @@ public class App {
                     // Cast object to Message, and assign message with value
                     message = (Message) object;
                     // Display message to Java FX
+                    System.out.println("User: " + message.getSender() + " Message: " + message.getMessageText());
 
                 }
 
                 else if (isUserList(object)) {
                     // Cast object to ArrayList, and assign userList with value
                     userList = (ArrayList) object;
+                    printListOfUsers(userList);
                     
                 }
             }
@@ -106,5 +107,18 @@ public class App {
         {
             return false;
         }
+    }
+
+    /*
+     * Print list of users
+     */
+    public static void printListOfUsers(ArrayList userList) {
+        System.out.println("List of users");
+        System.out.println("*****");
+        for (int i = 0; i < userList.size(); i++) {
+            User user = (User)userList.get(i);
+            System.out.println(user.getName());
+        }
+        System.out.println("*****");
     }
 }

@@ -111,13 +111,14 @@ public class Server {
 
         // Iterate list of sockets
         // Send list of users to each socket
-        Iterator iterator = socketList.iterator();
+        Iterator<Socket> iterator = socketList.iterator();
 
         while (iterator.hasNext()) {
             Socket socket = (Socket)iterator.next();
             try {
                 ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                 output.writeObject(userArrayList);
+                System.out.println("Sent ArrayList");
             } catch (IOException e) {
                 // TODO: handle exception
             }

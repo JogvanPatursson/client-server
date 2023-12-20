@@ -28,8 +28,8 @@ public class ClientHandler implements Runnable {
         // Check for input from client
         do {
             try {
+
                 /*
-                // Write to client
                 if (!messageList.isEmpty()) {
                     // Check size of messageCopyOnArrayList
                     Iterator iterator = messageList.iterator();
@@ -60,6 +60,9 @@ public class ClientHandler implements Runnable {
                     user = (User) object;
                     // Adds user to queue
                     Server.addUserToUserList(user);
+                    // Write to client
+                    // Send userList to client
+                    Server.sendUserList();
                 }
 
             } catch (IOException | ClassNotFoundException e) {
