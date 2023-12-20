@@ -5,13 +5,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class App {
     public static void main(String[] args) throws IOException {
+        // Fields
         Socket socket = new Socket("localhost", 8888);
         User user = createUser("Helgi", "localhost", 8888);
         Message message = createMessage(null, null);
+        ArrayList<User> userList = new ArrayList<User>();
         ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 
         System.out.println("Send message: ");
@@ -28,7 +32,6 @@ public class App {
             while (true) {
                 
                 // If new message is created
-                System.out.println("check if message != null");
                 if (message != null) {
                     output = new ObjectOutputStream(socket.getOutputStream());
                     System.out.println("message != null");
@@ -36,14 +39,23 @@ public class App {
                     output.flush();
                     message = null;
                 }
-                //Thread.sleep(10);
-                //output.writeObject(message);
-                //output.flush();
+
                 
+                /*
+                 * Listening to input
+                 */
                 ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-                Message inputMessage = (Message) input.readObject();
-                System.out.println("Reading inputSocket.....");
-                System.out.println("From server: " + inputMessage.getSender() + ": " + inputMessage.getMessageText());
+                Object object = input.readObject();
+                
+                if (isMessage(object)) {
+                    message = (Message) object;
+                    // Display message to Java FX
+                }
+
+                else if (isUserList(object)) {
+                    user = (User) object;
+                    // Add user to list of users
+                }
             }
         } catch (Exception e) {
             // TODO: handle exception
@@ -65,5 +77,31 @@ public class App {
     public static Message createMessage(String sender, String messageText) {
         Message message = new Message(sender, messageText);
         return message;
+    }
+
+       /*
+    * Check if object is of class Message
+    */
+    public static boolean isMessage(Object object) {
+        if (object instanceof Message) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /*
+    * Check if object is of class User
+    */
+    public static boolean isUserList(Object object) {
+        if (object instanceof CopyOnWriteArrayList) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

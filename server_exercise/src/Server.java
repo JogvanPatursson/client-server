@@ -76,15 +76,15 @@ public class Server {
      * Check which Users are online
      */
     public static void checkUserIsOnline(User user) {
-        
+
     }
 
     /*
      * Send message to all users
      */
     public static void sendMessage(Message message) {
-        // Iterate list of users and get their corrosponding sockets
-        // Send message through list of sockets
+        // Iterate list of sockets
+        // Send message to each socket
 
         Iterator iterator = socketList.iterator();
 
@@ -96,6 +96,26 @@ public class Server {
                 output.flush();
             } catch (IOException e) {
                 
+            }
+        }
+    }
+
+    /*
+     * Send list of users to all users
+     */
+    public static void sendUserList() {
+        // Iterate list of sockets
+        // Send list of users to each socket
+
+        Iterator iterator = socketList.iterator();
+
+        while (iterator.hasNext()) {
+            Socket socket = (Socket)iterator.next();
+            try {
+                ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+                output.writeObject(userList);
+            } catch (IOException e) {
+                // TODO: handle exception
             }
         }
     }
